@@ -1,0 +1,31 @@
+<launch>
+
+<!--connect robot-->
+
+   <node pkg= "rosaria" type= "RosAria" name= "RosAria" >
+               <param name= "port" value= "/dev/ttyUSB0" type= "string" />
+<!--将laser端口打开-->               
+                <!--set laser is available-->
+                <param name="publish_aria_lasers" value="true" />
+                <!--put the p3dx pose into odom,which can be used in ros -->
+                <remap from="/RosAria/pose" to="odom" />
+               <!--put the p3dx laserscan into scan,which can be used in ros -->
+                <remap from="/RosAria/lms1xx_1_laserscan" to="scan" />
+                <!--remap rosaria/cmd_vel to cmd_vel-->
+                <remap from="/RosAria/cmd_vel" to="cmd_vel" />    
+	</node>
+<!-- Starting laser tf -->
+ <!--node name="RosAriaLaserTf" pkg="p3dx_2dnav" type="RosAriaLaserTf.py" /--> 
+
+   <!--node pkg="sensor_node_pkg" type="sensor_node_type" name="sensor_node_name" output="screen"-->
+    <!--param name="sensor_param" value="param_value" /-->
+ <!--/node-->
+ <!--node pkg="odom_node_pkg" type="odom_node_type" name="odom_node" output="screen"-->
+    <!--param name="odom_param" value="param_value" /-->
+ <!--/node-->
+ <!--node pkg="transform_configuration_pkg" type="transform_configuration_type" name="transform_configuration_name" output="screen"-->
+    <!--param name="transform_configuration_param" value="param_value" /-->
+ <!--/node-->
+
+</launch> 
+

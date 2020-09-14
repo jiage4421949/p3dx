@@ -1,0 +1,28 @@
+<!--依次运行：连接机器人和激光，move_base点，gmapping，rviz，以及控制小车行走的 inerface-->
+
+
+<launch>
+
+<!--连接机器人-->
+	<node pkg = "rosaria" type = "RosAria" name = "RosAria">
+		<param name="port" value="/dev/ttyUSB0" type="string"/>
+
+<!--将laser端口打开-->               
+                <param name="publish_aria_lasers" value="true" />
+                <remap from="/RosAria/pose" to="odom" />
+                <remap from="/RosAria/lms1xx_1_laserscan" to="scan" />
+	</node>
+
+<!-- 进行tf设置-->
+<!--node pkg="tf" type="static_transform_publisher" name="base2laser" args="0.28 0 0.16 0 0 0 base_link laser 100" /-->
+
+<!-- 启动小车controller-->	
+
+<!--node pkg="rosaria_client" type="teleop" name="teleop" /-->
+<node pkg="rosaria_client" type="interface" name="RosAria_interface" output="screen"/>
+
+<!-- 启动move_base-->
+	<!--node pkg = "move_base" type = "move_base" name = "move_base"/-->
+	<!--include file="$(find my_p3dx_2dnav)/launch/move_base.launch" /-->
+
+</launch>

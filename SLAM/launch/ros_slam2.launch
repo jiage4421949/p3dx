@@ -1,0 +1,20 @@
+<!-- 第二部分，启动move_base,gmapping,rviz，小车控制器-->
+
+<launch>
+
+<!-- 启动move_base-->
+	<!--node pkg = "move_base" type = "move_base" name = "move_base"/-->
+		
+	
+ <!--启动gmapping-->
+
+    <node pkg = "gmapping" type = "slam_gmapping" name = "slam_gampping" args="/scan" output="screen">
+
+    </node>
+<!-- 启动rivz-->
+    <node pkg = "rviz" type = "rviz" name = "rviz"/>
+<!-- 启动小车controller-->	
+<!--node pkg="rosaria_client" type="teleop" name="teleop" /-->
+
+
+</launch>

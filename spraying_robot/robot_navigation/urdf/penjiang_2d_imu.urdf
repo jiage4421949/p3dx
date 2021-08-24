@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot name="penjiang_robot">
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="1.185 .765 .395"/>
+    </geometry>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <material name="blue">
+        <color rgba="0 0 .8 1"/>
+    </material>
+    </visual>
+ </link>
+
+  <link name="velodyne">
+    <visual>
+      <geometry>
+        <cylinder length=".07" radius=".0475"/>
+      </geometry>
+      <material name="gray">
+          <color rgba=".6 .6 .6 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="velodyne_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="velodyne"/>
+    <origin xyz="0.29625 0 .2325"/>
+  </joint>
+
+  <link name="imu">
+    <visual>
+      <geometry>
+        <box size=".045 .05 .025"/>
+      </geometry>
+      <material name="gray2">
+          <color rgba=".8 .8 .8 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="velodyne"/>
+    <child link="imu"/>
+    <origin xyz="0 0 .0475"/>
+  </joint>
+</robot>

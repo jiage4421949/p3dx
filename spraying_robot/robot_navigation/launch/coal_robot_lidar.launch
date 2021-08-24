@@ -1,0 +1,11 @@
+<launch>
+    <!-- config param -->
+    <arg name="pub_imu"       default="False" />
+    <arg name="sub_ackermann"       default="False" />
+    <arg name="lidar_frame" default="lazer_frame"/>  
+
+    <include file="$(find robot_navigation)/launch/coal_lidar.launch">
+        <arg name="lidar_frame"            value="$(arg lidar_frame)"/>  
+    </include>
+    
+</launch>

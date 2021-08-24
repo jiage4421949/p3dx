@@ -1,0 +1,64 @@
+<launch>
+
+  <arg name="planner"  default="dwa" doc="opt: dwa, teb"/>
+  <!--model description and static tf publisher-->
+  <param name="robot_description"
+    textfile="$(find robot_navigation)/urdf/penjiang_2d_imu.urdf" />
+  <param name="use_gui" value="False"/>
+  <node name="joint_state_publisher"
+    pkg="joint_state_publisher"
+    type="joint_state_publisher"/>
+  <node name="robot_state_publisher"
+    pkg="robot_state_publisher"
+    type="robot_state_publisher" />
+
+  <!--map server-->
+  <node name="map_server"
+    pkg="map_server"
+    type="map_server"
+    args="$(find robot_navigation)/maps/office_map_01.yaml"/>
+
+    <!--Warning: if you don't have wheel odom,
+    you can use laser_scan_matcher. Howerver, if you have wheel odom, don't use
+  laser_scan_matcher!-->
+  <!--laser odom-->
+  <!--<node pkg="laser_scan_matcher"
+    type="laser_scan_matcher_node"
+    name="laser_scan_matcher_node"
+    output="screen">
+    <param name="fixed_frame" value = "odom"/>
+    <param name="max_iterations" value="10"/>
+    <param name="kf_dist_linear" value="0.1"/>
+    <param name="kf_dist_angular" value="0.175"/>
+    <param name="use_imu" value="true"/>
+    <param name="use_odom" value="true"/>
+  </node>-->
+
+  <!--amcl-->
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+    <rosparam file="$(find robot_navigation)/param/$(env BASE_TYPE)/amcl_params.yaml" command="load" />
+    <param name="initial_pose_x"            value="0.0"/>
+    <param name="initial_pose_y"            value="0.0"/>
+    <param name="initial_pose_a"            value="0.0"/>
+    <param name="initial_cov_xx"            value="2"/>
+    <param name="initial_cov_yy"            value="2"/>
+    <param name="initial_cov_aa"            value="9"/>
+  </node>
+
+  <!--move base-->
+  <!--<group if="$(eval planner == 'dwa')">
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+      <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
+      <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+      <rosparam file="$(find robot_navigation)/param/$(env BASE_TYPE)/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find robot_navigation)/param/$(env BASE_TYPE)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find robot_navigation)/param/$(env BASE_TYPE)/local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find robot_navigation)/param/$(env BASE_TYPE)/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find robot_navigation)/param/$(env BASE_TYPE)/move_base_params.yaml" command="load" />
+      <rosparam file="$(find robot_navigation)/param/$(env BASE_TYPE)/global_planner_params.yaml" command="load" />
+      <rosparam file="$(find robot_navigation)/param/$(env BASE_TYPE)/dwa_local_planner_params.yaml" command="load" />
+    </node>
+  </group>-->
+
+
+</launch>

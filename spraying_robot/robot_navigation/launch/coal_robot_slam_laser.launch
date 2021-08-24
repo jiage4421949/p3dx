@@ -1,0 +1,40 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="slam_methods" default="gmapping" doc="slam type [gmapping, hector, karto, cartographer]"/>
+  <arg name="open_rviz" default="true"/>
+  <arg name="simulation" default= "false"/>
+  <arg name="planner"  default="dwa" doc="opt: dwa, teb"/>
+
+  <param name="/use_sim_time" value="$(arg simulation)" />
+
+  <!-- simulation robot with lidar and map-->
+  <group if="$(arg simulation)">
+    <include file="$(find robot_navigation)/simulation/simulation_robot.launch"/>
+  </group>
+
+  <!-- robot with lidar -->
+  <!-- group unless="$(arg simulation)">
+    <include file="$(find robot_navigation)/launch/coal_robot_lidar.launch"/>
+  </group-->
+
+  <!-- SLAM: Gmapping, Cartographer, Hector, Karto -->
+  <include file="$(find robot_navigation)/launch/includes/$(arg slam_methods).launch">
+    <arg name="simulation"            value="$(arg simulation)"/>
+  </include>
+
+  <!-- move_base -->
+  <group unless="$(eval planner == '')">
+    <include file="$(find robot_navigation)/launch/move_base.launch" unless="$(eval planner == '')">
+        <arg name="planner"            value="$(arg planner)"/>
+    </include>
+  </group>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)">
+    <!--node name="rviz" pkg="rviz" type="rviz" required="true"
+      args="-d $(find cartographer_ros)/configuration_files/demo_2d.rviz" /-->
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find robot_navigation)/rviz/navigation.rviz"/>
+  </group>
+
+</launch>

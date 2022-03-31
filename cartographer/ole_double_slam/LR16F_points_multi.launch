@@ -1,0 +1,102 @@
+<!-- -*- mode: XML -*- -->
+<!-- run ole_pointcloud/CloudNodelet in a nodelet manager for a LR16F -->
+
+<launch>
+<!-- For First ole -->
+
+<group ns="ns1">
+  <!-- declare arguments with default values -->
+  <arg name="calibration" default="$(find ole_pointcloud)/params/LR16F.yaml"/>
+  <arg name="device_ip" default="192.168.1.100" />
+  <arg name="frame_id" default="olei_first" />
+  <arg name="manager" default="$(arg frame_id)_nodelet_manager" />
+  <arg name="max_range" default="130.0" />
+  <arg name="min_range" default="0.4" />
+  <arg name="pcap" default="" />
+  <arg name="port" default="2368" />
+  <arg name="read_fast" default="false" />
+  <arg name="read_once" default="false" />
+  <arg name="repeat_delay" default="0.0" />
+  <arg name="rpm" default="600.0" />
+
+  <!-- start nodelet manager and driver nodelets -->
+  <include file="$(find ole_driver)/launch/nodelet_manager.launch">
+    <arg name="device_ip" value="$(arg device_ip)"/>
+    <arg name="frame_id" value="$(arg frame_id)"/>
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="model" value="LR16F"/>
+    <arg name="pcap" value="$(arg pcap)"/>
+    <arg name="port" value="$(arg port)"/>
+    <arg name="read_fast" value="$(arg read_fast)"/>
+    <arg name="read_once" value="$(arg read_once)"/>
+    <arg name="repeat_delay" value="$(arg repeat_delay)"/>
+    <arg name="rpm" value="$(arg rpm)"/>
+  </include>
+
+  <!-- start cloud nodelet -->
+  <include file="$(find ole_pointcloud)/launch/cloud_nodelet.launch">
+    <arg name="calibration" value="$(arg calibration)"/>
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="max_range" value="$(arg max_range)"/>
+    <arg name="min_range" value="$(arg min_range)"/>
+  </include>
+
+  <!-- start laserscan nodelet -->
+  <include file="$(find ole_pointcloud)/launch/laserscan_nodelet.launch">
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="ring" value="$(arg frame_id)_laserscan_ring"/>
+    <arg name="resolution" value="$(arg frame_id)_laserscan_resolution"/>
+  </include>
+
+</group>
+
+<!-- For Second ole -->
+
+<group ns="ns2">
+  <!-- declare arguments with default values -->
+  <arg name="calibration" default="$(find ole_pointcloud)/params/LR16F.yaml"/>
+  <arg name="device_ip" default="192.168.1.101" />
+  <arg name="frame_id" default="olei_second" />
+  <arg name="manager" default="$(arg frame_id)_nodelet_manager" />
+  <arg name="max_range" default="130.0" />
+  <arg name="min_range" default="0.4" />
+  <arg name="pcap" default="" />
+  <arg name="port" default="2369" />
+  <arg name="read_fast" default="false" />
+  <arg name="read_once" default="false" />
+  <arg name="repeat_delay" default="0.0" />
+  <arg name="rpm" default="600.0" />
+
+  <!-- start nodelet manager and driver nodelets -->
+  <include file="$(find ole_driver)/launch/nodelet_manager.launch">
+    <arg name="device_ip" value="$(arg device_ip)"/>
+    <arg name="frame_id" value="$(arg frame_id)"/>
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="model" value="LR16F"/>
+    <arg name="pcap" value="$(arg pcap)"/>
+    <arg name="port" value="$(arg port)"/>
+    <arg name="read_fast" value="$(arg read_fast)"/>
+    <arg name="read_once" value="$(arg read_once)"/>
+    <arg name="repeat_delay" value="$(arg repeat_delay)"/>
+    <arg name="rpm" value="$(arg rpm)"/>
+  </include>
+
+  <!-- start cloud nodelet -->
+  <include file="$(find ole_pointcloud)/launch/cloud_nodelet.launch">
+    <arg name="calibration" value="$(arg calibration)"/>
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="max_range" value="$(arg max_range)"/>
+    <arg name="min_range" value="$(arg min_range)"/>
+  </include>
+
+<!-- start laserscan nodelet -->
+  <include file="$(find ole_pointcloud)/launch/laserscan_nodelet.launch">
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="ring" value="$(arg frame_id)_laserscan_ring"/>
+    <arg name="resolution" value="$(arg frame_id)_laserscan_resolution"/>
+  </include>
+
+</group>
+
+
+</launch>
